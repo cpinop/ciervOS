@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Handbook del Oráculo — Constanza Valentina &amp; Ricardo Alberto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Great+Vibes&family=Montserrat:ital,wght@0,400;0,500;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #000000;
+      --cream: #f5efe4;
+      --soft: #e2d9cd;
+      --muted: #b1a494;
+      --gold: #c8a251;
+      --gold-old: #b6944e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Montserrat', sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* Brillitos plateados ultra-livianos en CSS puro */
+    .sparkles {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .sp {
+      position: absolute;
+      top: -12px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #e5ecf4;
+      opacity: 0;
+      animation: fall linear infinite;
+      will-change: transform, opacity;
+    }
+
+    .sp.star {
+      width: 5px;
+      height: 5px;
+      border-radius: 0;
+      transform: rotate(45deg);
+      background: #ffffff;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(0) scale(0.7); opacity: 0; }
+      15%  { opacity: 0.65; }
+      85%  { opacity: 0.45; }
+      100% { transform: translateY(105vh) scale(1); opacity: 0; }
+    }
+
+    .frame-line {
+      position: fixed;
+      inset: 8px;
+      border: 1px solid rgba(200, 162, 81, 0.25);
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 3 franjas fijas (zero-scroll real, botones nunca sobre el texto) */
+    .app-shell {
+      position: relative;
+      z-index: 2;
+      height: 100dvh;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 14px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .topbar {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 2px 10px;
+    }
+
+    .home-btn {
+      background: #000;
+      border: 1px solid rgba(200, 162, 81, 0.55);
+      color: var(--gold);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .home-btn:active { background: var(--gold); color: #000; }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 162, 81, 0.55);
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .dot.active { background: var(--gold); }
+
+    .stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4px 6px;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 540px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .slide.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .kicker {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .text-bold {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(19px, 4.8vw, 25px);
+      line-height: 1.42;
+      font-weight: 600;
+      color: var(--cream);
+    }
+
+    .slide-art {
+      width: clamp(92px, 24vw, 128px);
+      height: clamp(76px, 20vw, 108px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+    }
+
+    .slide-art svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .text-italic {
+      font-family: 'Montserrat', sans-serif;
+      font-style: italic;
+      font-size: clamp(13.5px, 3.6vw, 16px);
+      line-height: 1.68;
+      font-weight: 400;
+      color: var(--soft);
+    }
+
+    /* Última lámina: Firmas + Instagram en oro viejo */
+    .authors-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .author-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(34px, 8.8vw, 48px);
+      color: var(--gold);
+      line-height: 1.12;
+    }
+
+    .author-amp {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(26px, 6.5vw, 34px);
+      color: var(--gold-old);
+      line-height: 1;
+    }
+
+    .ig-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .ig-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--cream);
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(13.5px, 3.6vw, 15.5px);
+      letter-spacing: 0.6px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(182, 148, 78, 0.45);
+      background: rgba(182, 148, 78, 0.06);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .ig-link:hover {
+      border-color: var(--gold);
+      background: rgba(182, 148, 78, 0.16);
+    }
+
+    .ig-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--gold-old);
+      flex-shrink: 0;
+    }
+
+    .navbar {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding-top: 12px;
+    }
+
+    .nav-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 11px 18px;
+      border-radius: 4px;
+      border: 1px solid rgba(200, 162, 81, 0.6);
+      background: #000;
+      color: var(--cream);
+      cursor: pointer;
+    }
+
+    .nav-btn-primary {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="frame-line" aria-hidden="true"></div>
+  <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="home-btn" onclick="goToSlide(0)">⌂ Inicio</button>
+      <div class="dots" id="dots" aria-label="Progreso"></div>
+    </header>
+
+    <main class="stage">
+      <!-- SLIDE 1 -->
+      <section class="slide active">
+        <div class="kicker">01 · Tu Mapa Astral</div>
+        <p class="text-bold">Tu carta astral es una fotografía exacta de cómo estaba el cielo en el instante en que naciste.</p>
+        <div class="slide-art">
+          <svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+            <circle cx="60" cy="50" r="38"/>
+            <circle cx="60" cy="50" r="24" stroke-dasharray="2 4" stroke-opacity="0.65"/>
+            <line x1="60" y1="6" x2="60" y2="94" stroke-opacity="0.45"/>
+            <line x1="16" y1="50" x2="104" y2="50" stroke-opacity="0.45"/>
+            <circle cx="60" cy="50" r="3" fill="currentColor"/>
+            <circle cx="38" cy="30" r="2.2" fill="#fff" stroke="none"/>
+            <circle cx="84" cy="34" r="2" fill="#fff" stroke="none"/>
+            <circle cx="76" cy="72" r="2.2" fill="#fff" stroke="none"/>
+          </svg>
+        </div>
+        <p class="text-italic">Lejos de ser una sentencia fija sobre tu futuro, funciona como un mapa de tu arquitectura interna.</p>
+      </section>
+
+      <!-- SLIDE 2 -->
+      <section class="slide">
+        <div class="kicker">02 · Recursos y Sombras</div>
+        <p class="text-bold">Muestra tus recursos psicológicos, tus tendencias naturales, tus oportunidades y también los puntos difíciles que se repiten.</p>
+        <div class="slide-art">
+          <svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+            <circle cx="46" cy="50" r="28"/>
+            <circle cx="74" cy="50" r="28"/>
+            <circle cx="46" cy="50" r="3" fill="currentColor"/>
+            <path d="M78 40 A10 10 0 1 0 78 60 A7.5 10 0 1 1 78 40 Z" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <p class="text-italic">Sirve para descubrir qué fortaleza activar cuando quieres prosperar en lo material o qué sombra aparece al vincularte con otros.</p>
+      </section>
+
+      <!-- SLIDE 3 -->
+      <section class="slide">
+        <div class="kicker">03 · Si tu Cielo Hablara</div>
+        <p class="text-bold">Este oráculo nace de una idea sencilla: ¿qué consejo te daría cada uno de tus diez planetas según la constelación donde nació?</p>
+        <div class="slide-art">
+          <svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M52 44 L42 22 L26 14 M42 22 L40 8 M68 44 L78 22 L94 14 M78 22 L80 8"/>
+            <polygon points="50,44 38,40 46,54 53,78 60,88 67,78 74,54 82,40 70,44"/>
+            <polygon points="49,56 54,54 57,56.5 53,58.5" fill="#fff" stroke="none"/>
+            <polygon points="71,56 66,54 63,56.5 67,58.5" fill="#fff" stroke="none"/>
+          </svg>
+        </div>
+        <p class="text-italic">Por ejemplo, a alguien con el Sol en Leo le recordaría que brilla de verdad cuando se atreve a subir al escenario y ocupar su lugar.</p>
+      </section>
+
+      <!-- SLIDE 4 -->
+      <section class="slide">
+        <div class="kicker">04 · Cuatro Elementos</div>
+        <p class="text-bold">Cada combinación planetaria te aconseja en cuatro planos: Fuego (impulso vital), Tierra (lo concreto), Aire (lo racional) y Agua (emociones).</p>
+        <div class="slide-art">
+          <svg viewBox="0 0 140 96" fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="8" y="16" width="28" height="64" rx="4" fill="#5a182b"/>
+            <rect x="40" y="10" width="28" height="64" rx="4" fill="#b6944e"/>
+            <rect x="72" y="16" width="28" height="64" rx="4" fill="#1b3a2f"/>
+            <rect x="104" y="22" width="28" height="64" rx="4" fill="#14213d"/>
+          </svg>
+        </div>
+        <p class="text-italic">Diez posiciones multiplicadas por cuatro elementos dan origen a estas 40 cartas: Rubí, Ámbar, Esmeralda y Zafiro.</p>
+      </section>
+
+      <!-- SLIDE 5 -->
+      <section class="slide">
+        <div class="kicker">05 · Único en el Mundo</div>
+        <p class="text-bold">Lo que tienes en tus manos no es un oráculo genérico hecho en serie, sino una guía escrita a partir de tu propio cielo.</p>
+        <div class="slide-art">
+          <svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <rect x="38" y="14" width="44" height="68" rx="5" transform="rotate(-14 60 50)" fill="#000"/>
+            <rect x="38" y="14" width="44" height="68" rx="5" transform="rotate(14 60 50)" fill="#000"/>
+            <rect x="38" y="12" width="44" height="68" rx="5" fill="#000"/>
+            <circle cx="60" cy="36" r="6"/><circle cx="60" cy="36" r="1.4" fill="currentColor"/>
+            <line x1="48" y1="54" x2="72" y2="54" stroke-opacity="0.7"/>
+            <line x1="52" y1="62" x2="68" y2="62" stroke-opacity="0.5"/>
+          </svg>
+        </div>
+        <p class="text-italic">No existe otro mazo exactamente igual al tuyo. Cada frase pertenece a tu mapa natal.</p>
+      </section>
+
+      <!-- SLIDE 6 -->
+      <section class="slide">
+        <div class="kicker">06 · Cómo Consultarlo</div>
+        <p class="text-bold">Al barajar y elegir una carta, no le pides al azar que decida por ti: abres una conversación lúcida contigo.</p>
+        <div class="slide-art">
+          <svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <circle cx="60" cy="50" r="38"/>
+            <rect x="36" y="26" width="48" height="48" transform="rotate(45 60 50)" stroke-opacity="0.55"/>
+            <polygon points="60,18 82,58 38,58" stroke-opacity="0.65"/>
+            <circle cx="60" cy="50" r="3" fill="#fff" stroke="none"/>
+          </svg>
+        </div>
+        <p class="text-italic">Úsalo cuando necesites ordenar tus ideas, mirar tus emociones con honestidad o hacer una pausa antes de actuar.</p>
+      </section>
+
+      <!-- SLIDE 7 (ÚLTIMA LÁMINA): Constanza Valentina & Ricardo Alberto + Instagram en oro viejo -->
+      <section class="slide">
+        <div class="slide-art">
+          <svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="60" cy="50" r="42" stroke-opacity="0.55"/>
+            <path d="M54 44 L46 28 L34 22 M46 28 L45 16 M66 44 L74 28 L86 22 M74 28 L75 16"/>
+            <polygon points="52,44 43,41 49,52 54,70 60,78 66,70 71,52 77,41 68,44"/>
+            <polygon points="51.5,53 55.5,51.5 58,53.5 54.5,55" fill="#fff" stroke="none"/>
+            <polygon points="68.5,53 64.5,51.5 62,53.5 65.5,55" fill="#fff" stroke="none"/>
+          </svg>
+        </div>
+
+        <div class="authors-block">
+          <div class="author-name">Constanza Valentina</div>
+          <div class="author-amp">&amp;</div>
+          <div class="author-name">Ricardo Alberto</div>
+        </div>
+
+        <div class="ig-list">
+          <a class="ig-link" href="https://instagram.com/constanza_pino_piguillen" target="_blank" rel="noopener">
+            <svg class="ig-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5"/>
+              <circle cx="12" cy="12" r="4.5"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+            <span>constanza_pino_piguillen</span>
+          </a>
+          <a class="ig-link" href="https://instagram.com/psicoandino" target="_blank" rel="noopener">
+            <svg class="ig-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5"/>
+              <circle cx="12" cy="12" r="4.5"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+            <span>psicoandino</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <nav class="navbar" aria-label="Navegación">
+      <button class="nav-btn hidden" id="prevBtn" onclick="prevSlide()">← Anterior</button>
+      <button class="nav-btn nav-btn-primary" id="nextBtn" onclick="nextSlide()">Siguiente →</button>
+    </nav>
+  </div>
+
+  <script>
+    (function initSparkles() {
+      const box = document.getElementById('sparkles');
+      let html = '';
+      for (let i = 0; i < 14; i++) {
+        const left = (i * 7.3 + 4) % 96;
+        const dur = (7 + (i % 5) * 2.2).toFixed(1);
+        const delay = (-i * 1.3).toFixed(1);
+        const cls = i % 3 === 0 ? 'sp star' : 'sp';
+        html += `<i class="${cls}" style="left:${left}%;animation-duration:${dur}s;animation-delay:${delay}s"></i>`;
+      }
+      box.innerHTML = html;
+    })();
+
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const TOTAL = slides.length;
+    let current = 0;
+
+    function renderDots() {
+      const box = document.getElementById('dots');
+      box.innerHTML = slides.map((_, i) =>
+        `<button class="dot ${i === current ? 'active' : ''}" onclick="goToSlide(${i})" aria-label="Slide ${i + 1}"></button>`
+      ).join('');
+    }
+
+    function updateUI() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      document.getElementById('prevBtn').classList.toggle('hidden', current === 0);
+      document.getElementById('nextBtn').classList.toggle('hidden', current === TOTAL - 1);
+      renderDots();
+    }
+
+    function goToSlide(i) { current = Math.max(0, Math.min(TOTAL - 1, i)); updateUI(); }
+    function nextSlide() { if (current < TOTAL - 1) goToSlide(current + 1); }
+    function prevSlide() { if (current > 0) goToSlide(current - 1); }
+
+    window.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    let sx = 0;
+    window.addEventListener('touchstart', e => { sx = e.changedTouches[0].clientX; }, { passive: true });
+    window.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - sx;
+      if (dx < -50) nextSlide();
+      if (dx > 50) prevSlide();
+    }, { passive: true });
+
+    updateUI();
+  </script>
+</body>
+</html>
